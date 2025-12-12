@@ -333,18 +333,52 @@ ul{
   }
 
  
-  .interest-grid {
+  /* .interest-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+  } */
+
+  .interest-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
   }
 
- 
-  .footer .row {
+  .interest-card {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  @media (max-width: 576px) {
+
+  .intern-card {
+    width: 100% !important;
+    flex-direction: column;
     text-align: center;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .intern-card h5 {
+    font-size: 18px;
+  }
+
+  .intern-card p {
+    font-size: 14px;
   }
 }
 
+
+}
+ 
+  
+
+
 @media (max-width: 576px) {
+
+  .footer .row {
+    text-align: center;
+  }
   .footer .phone {
     justify-content: center !important;
     width: 100%;
