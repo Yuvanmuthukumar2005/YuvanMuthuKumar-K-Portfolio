@@ -279,6 +279,10 @@ ul{
     text-align: center;
   }
 
+   .myinfo{
+    font-size: small;
+  }
+
   .my-info h1 {
     font-size: 22px;
   }
@@ -469,4 +473,5 @@ ul{
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
 
