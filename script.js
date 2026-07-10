@@ -1,36 +1,52 @@
-// Typing Effect
-const typingText = ["Java Developer", "Full Stack Developer", "Web Developer", "UI/UX Designer"];
-let index = 0;
-let charIndex = 0;
-
-function typeEffect() {
-    const typingElement = document.getElementById("typing");
-
-    if (charIndex < typingText[index].length) {
-        typingElement.innerHTML += typingText[index].charAt(charIndex);
-        charIndex++;
-        setTimeout(typeEffect, 120);
+// Typing effect
+  const roles = ["Java Developer","Spring Boot Engineer","React Developer","Full Stack Builder","Frontend Developer","Backend Developer"];
+  const typingEl = document.getElementById('typing');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ri = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    if(!typingEl) return;
+    const word = roles[ri];
+    if(!deleting){
+      ci++;
+      typingEl.textContent = word.slice(0, ci);
+      if(ci === word.length){ deleting = true; setTimeout(typeLoop, 1200); return; }
     } else {
-        setTimeout(eraseEffect, 1000);
+      ci--;
+      typingEl.textContent = word.slice(0, ci);
+      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
     }
-}
+    setTimeout(typeLoop, deleting ? 45 : 90);
+  }
+  if(reduceMotion){ typingEl.textContent = roles[0]; } else { typeLoop(); }
 
-function eraseEffect() {
-    const typingElement = document.getElementById("typing");
+  function scrollToContact(){
+    document.getElementById('contact').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth'});
+  }
 
-    if (charIndex > 0) {
-        typingElement.innerHTML = typingText[index].substring(0, charIndex - 1);
-        charIndex--;
-        setTimeout(eraseEffect, 80);
-    } else {
-        index = (index + 1) % typingText.length;
-        setTimeout(typeEffect, 150);
-    }
-}
+  // Route rail progress + active stop
+  const rail = document.getElementById('routeRail');
+  const fill = document.getElementById('routeFill');
+  const marker = document.getElementById('routeMarker');
+  const stops = rail ? Array.from(rail.querySelectorAll('.stop')) : [];
+  const stopSections = ['about','skills','education','internship','projects','contact'];
 
-document.addEventListener("DOMContentLoaded", typeEffect);
+  function updateRail(){
+    if(!rail) return;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = Math.min(1, Math.max(0, window.scrollY / docHeight));
+    const railHeight = rail.offsetHeight;
+    fill.style.height = (progress * railHeight) + 'px';
+    marker.style.top = (progress * railHeight - 6) + 'px';
 
-// Scroll to Contact Section
-function scrollToContact() {
-    document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
-}
+    let activeIndex = 0;
+    stopSections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if(el && el.getBoundingClientRect().top < window.innerHeight * 0.5){
+        activeIndex = i;
+      }
+    });
+    stops.forEach((s, i) => s.classList.toggle('active', i <= activeIndex));
+  }
+  window.addEventListener('scroll', updateRail, {passive:true});
+  window.addEventListener('resize', updateRail);
+  updateRail();
